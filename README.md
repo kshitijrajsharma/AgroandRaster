@@ -1,1 +1,2 @@
 # AgroandRaster
+used conda environment
