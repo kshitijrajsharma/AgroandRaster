@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Map</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+  .form-group {
+    margin-bottom: 15px;
+    width: 500px;
+    padding-left: 50px;
+    }
+    </style>
+ 
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <!-- <a class="navbar-brand" href="#">Kshitizapp</a> -->
+          </div>
+          <ul class="nav navbar-nav">
+            <li ><a href="http://127.0.0.1:8000/">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://127.0.0.1:8000/register"> <span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+            <li><a href="http://127.0.0.1:8000/login"><span class="glyphicon glyphicon-log-in" ></span > Login</a></li>
+          </ul>
+        </div>
+      </nav>
+<div class="content-section">
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% load crispy_forms_tags %}
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Log In </legend>
+            {{form|crispy}}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit"> Log In</button>
+        </div>
+    </form>
+    <p> Login With </p>
+    <a href="{% url 'social:begin' 'github' %}">
+      <button type='button' name='Button' class=' btn btn-primary'>Github </button>
+    </a>
+    <a href="{% url 'social:begin' 'facebook' %}">
+      <button type='button' name='Button' class=' btn btn-primary'>Facebook </button>
+    </a>
+    <a href="{% url 'social:begin' 'google-oauth2' %}">
+      <button type='button' name='Button' class=' btn btn-primary'>Google </button>
+    </a>
+    <a href="{% url 'social:begin' 'twitt' %}">
+      <button type='button' name='Button' class=' btn btn-primary'>Twitter </button>
+    </a>
+    <div class="border-top pt-3">
+        <small class="text-muted">Need An Account ?<a class="ml-2" href="http://127.0.0.1:8000/register"> Sign Up Now</a></small>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Routing Map</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
+
+</head>
+<body>
+    <div id="map" style="height: 620px"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <!-- <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script> -->
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=RLZ8YxEuNIANdeMtQqESTzGD3vTZ0YmX"></script>
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=RLZ8YxEuNIANdeMtQqESTzGD3vTZ0YmX"></script>
+
+    <script>
+        var map,dir;
+
+        map = L.map('map', {
+            layers: MQ.mapLayer(),
+            center: [ 27.7, 85.4 ],
+            zoom: 15
+        });
+
+        dir = MQ.routing.directions();
+
+        dir.route({
+            locations: [
+                { latLng: { lat: 27.7298997, lng: 85.328509 } },
+                { latLng: { lat: 27.7392123, lng: 85.322046 } }
+                ],
+                options: { mustAvoidLinkIds: 112996198 }
+            });
+
+        console.log(map.addLayer(MQ.routing.routeLayer({
+            directions: dir,
+            fitBounds: true
+            })));
+
+
+    </script>
+</body>
+</html>

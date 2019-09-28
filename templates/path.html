@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Routing Map</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
+
+</head>
+<body>
+    <div id="map" style="height: 620px"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+    <!-- <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=RLZ8YxEuNIANdeMtQqESTzGD3vTZ0YmX"></script> -->
+    <!-- <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=RLZ8YxEuNIANdeMtQqESTzGD3vTZ0YmX"></script> -->
+
+    <script>
+        L.mapquest.key = 'RLZ8YxEuNIANdeMtQqESTzGD3vTZ0YmX';
+        L.mapquest.open = false; //allows openstreetmap data 
+        let map = L.mapquest.map('map', {
+        center: [ 27.7, 85.4 ],
+        layers: L.mapquest.tileLayer('map'),
+        zoom: 14,
+        zoomControl: false
+        });
+        map.addControl(L.mapquest.control(
+            {
+                position: 'topright'
+                }
+        ));
+        // map.addControl(L.mapquest.satelliteControl());
+        // map.addControl(L.mapquest.trafficControl(
+        //     {
+        //         className: '',
+        //         colors: {
+        //             low: '#1ca747',
+        //             medium: '#feeb41',
+        //             high: '#df0021',
+        //             closed: '#0c0000'
+        //         },
+        //         construction: true,
+        //         flow: true,
+        //         incidents: true,
+        //         position: 'topright',
+        //         markets: true,
+        //         title: 'Road Traffic'
+        //         }
+
+        // ));
+// /A control that allows for drop in routing functionality, the control has start and destination inputs on the left hand side of the map.
+        let directionsControl = L.mapquest.directionsControl({
+        className: '',
+        directions: {
+            options: {
+                avoids : [ 27.723825, 85.331032],
+            // timeOverage: 25,
+                doReverseGeocode: false,
+                }
+        },
+        //A layer that shows a route on a map. A route can have locations, a primary route ribbon, and alternate route ribbons. 
+        directionsLayer: {
+                startMarker: {
+                    title: 'लाेकेसन चेन्ज गर्न Drag गर्नु हाेस । ',
+                    draggable: true,
+                    icon: 'marker-start',
+                    iconOptions: {
+                        size: 'sm',
+                        primaryColor: '#1fc715',
+                        secondaryColor: '#1fc715',
+                        symbol: 'A'
+                        }
+                    },
+                endMarker: {
+                    draggable: true,
+                    title: 'लाेकेसन चेन्ज गर्न Drag गर्नु हाेस ।',
+                    icon: 'marker-end',
+                    iconOptions: {
+                        size: 'sm'
+                        }
+                    },
+                viaMarker: {
+                    title: 'Route चेन्ज गर्न Drag गर्नु हाेस ।'
+                    },
+                routeRibbon: {
+
+                    showTraffic: true
+                    },
+                alternateRouteRibbon: {
+                    showTraffic: true
+                    },
+            // paddingTopLeft: [450, 20],
+            // paddingBottomRight: [180, 20],
+            },
+        startInput: {
+            compactResults: true,
+            disabled: false,
+            location: {},
+            placeholderText: 'म्यापमा कि्लक गर्नुहाेस । ',
+            geolocation: {
+                enabled: true
+                },
+            clearTitle: 'Starting Point हटाउनुहाेस ।'
+        },
+        endInput: {
+            compactResults: true,
+            disabled: false,
+            location: {},
+            placeholderText: 'Destination कि्लक गर्नुहाेस । ',
+            geolocation: {
+                enabled: true
+                },
+            clearTitle: 'Destination हटाउनुहाेस ।'
+        },
+        addDestinationButton: {
+            enabled: true,
+            maxLocations: 10,
+        },
+        routeTypeButtons: {
+            enabled: true,
+        },
+        reverseButton: {
+            enabled: true,
+        },
+        optionsButton: {
+            enabled: true,
+        },
+        routeSummary: {
+            enabled: true,
+            compactResults: false,
+        },
+        narrativeControl: {
+            enabled: true,
+            compactResults: false,
+            interactive: true,
+        }
+        }).addTo(map);
+
+
+    </script>
+</body>
+</html>

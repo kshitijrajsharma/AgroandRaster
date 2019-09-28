@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Map</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+              {% if user.is_authenticated %}
+              <a class="navbar-brand" href="http://127.0.0.1:8000/district">DistrictMap</a>
+            {% endif %}
+          </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="http://127.0.0.1:8000">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+              <li><a href="http://127.0.0.1:8000/profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+              <li><a href="http://127.0.0.1:8000/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+            {% else %}
+              <li><a href="http://127.0.0.1:8000/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              <li><a href="http://127.0.0.1:8000/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+      
+<!-- define a the area the map will go into. Feel free to change the size as needed -->
+<div id="map" style=" height: 600px;"></div>
+<script>
+  
+var map = L.map('map').setView([28.3949, 84.1240],7);
+osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy;  Kshitijraj Sharma'
+    });
+                
+    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+    googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+    googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+
+    var mapboxTiles = L.tileLayer('https://api.mapbox.com/styles/v1/skshitiz1/cjvosths00oqu1cln1v7765pf/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2tzaGl0aXoxIiwiYSI6ImNqcmJ2czBjODBhMTgzeWxwM2t1djJuaXUifQ.wlFktg-soH3B_pqVyJj2Ig').addTo(map);
+    var baseLayers = {
+                    "OpenStreetMap": osm,
+                    "Google Streets": googleStreets,
+                    "Google Hybrid": googleHybrid,
+                    "Google Satellite": googleSat,
+                    "Google Terrain": googleTerrain,
+                    "Mapbox Tiles": mapboxTiles
+                };
+                
+                // map.addLayer(osm);
+    layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
+var baseurl='http://127.0.0.1:8000/'
+
+var datasets=new L.geoJson.ajax(baseurl+'agriculturedataset',{
+	onEachFeature: function (feature, layer) {
+		var popUpContent = "";
+		popUpContent += '<table style="width:100%;" id="CHAL-popup" class="popuptable">';
+		for (data in layer.feature.properties) {
+			popUpContent += "<tr>" + "<td>" + data + "</td>" + "<td>" + "  " + layer.feature.properties[data] + "</td>" + "</tr>";
+		}
+		popUpContent += '</table>';
+		layer.bindPopup(L.popup({
+			closeOnClick: true,
+			closeButton: true,
+			keepInView: true,
+			autoPan: true,
+			maxHeight: 200,
+			minWidth: 250
+		}).setContent(popUpContent));
+	}
+
+}).addTo(map);
+datasets.on('data:loaded', function (data) {
+        datasets.setStyle({
+            fillColor: 'green',
+            weight: 1,
+            opacity: 1,
+            color: 'black',
+            dashArray: '3',
+            fillOpacity: 0.2
+			});
+			})
+console.log(datasets);
+datasets.addTo(map);
+// map.fitBounds(datasets.getBounds());
+</script>
+</body>
+</html>
