@@ -25,7 +25,7 @@ def district(request):
     template_name='district.html'
     return render(request,template_name)
 def HomePageView(request):
-    template_name= 'Home.html'
+    template_name= 'home.html'
     return render(request,template_name)
 def vectorize(request):  
     with rasterio.open(r'C:\Users\sharm\Desktop\naxa\flood-map.tif') as dataset:
